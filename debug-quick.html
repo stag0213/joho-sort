@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デバッグ - クイックソート</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        .debug-panel {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .step-log {
+            margin: 5px 0;
+            padding: 8px;
+            background: #f5f5f5;
+            border-left: 3px solid #2196f3;
+        }
+        .pivot-highlight {
+            background: #FFE0B2 !important;
+            border-left-color: #FF9800 !important;
+        }
+        .test-viz {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 クイックソート ピボット表示デバッグ</h1>
+    
+    <div class="test-viz">
+        <h2>視覚化テスト</h2>
+        <div id="test-container">
+            <div class="algo-visualization" id="viz-quick">
+                <div class="algo-header">
+                    <div class="algo-name">🚀 クイックソート</div>
+                </div>
+                <div class="bars-container" id="bars-quick" style="height: 200px;"></div>
+            </div>
+        </div>
+        <button onclick="runTest()">テスト実行（配列: [8, 3, 1, 7, 0, 10, 2]）</button>
+    </div>
+
+    <div class="debug-panel">
+        <h3>デバッグログ:</h3>
+        <div id="debug-log"></div>
+    </div>
+
+    <script src="js/algorithms.js"></script>
+    <script>
+        function log(message, isPivot = false) {
+            const logDiv = document.getElementById('debug-log');
+            const entry = document.createElement('div');
+            entry.className = 'step-log' + (isPivot ? ' pivot-highlight' : '');
+            entry.innerHTML = message;
+            logDiv.appendChild(entry);
+        }
+
+        function runTest() {
+            const container = document.getElementById('bars-quick');
+            const debugLog = document.getElementById('debug-log');
+            debugLog.innerHTML = '';
+            container.innerHTML = '';
+
+            const testArray = [8, 3, 1, 7, 0, 10, 2];
+            log(`<strong>開始:</strong> 配列 = [${testArray.join(', ')}]`);
+
+            // アルゴリズム実行
+            const algo = new SortingAlgorithms();
+            const steps = algo.quickSort(testArray);
+            log(`<strong>総ステップ数:</strong> ${steps.length}`);
+
+            // バーを作成
+            const maxValue = Math.max(...testArray);
+            testArray.forEach((value, index) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.id = `quick-bar-${index}`;
+                const height = (value / maxValue) * 150;
+                bar.style.height = `${height}px`;
+                
+                const valueLabel = document.createElement('div');
+                valueLabel.className = 'bar-value';
+                valueLabel.textContent = value;
+                bar.appendChild(valueLabel);
+                
+                container.appendChild(bar);
+            });
+
+            log(`<strong>バー作成完了</strong>`);
+
+            // ステップを順次実行
+            let currentStep = 0;
+            const stepInterval = setInterval(() => {
+                if (currentStep >= Math.min(steps.length, 20)) {
+                    clearInterval(stepInterval);
+                    log(`<strong>完了</strong> (最初の20ステップを表示)`);
+                    return;
+                }
+
+                const step = steps[currentStep];
+                const isPivotStep = step.type === 'pivot' || step.pivotIndex !== undefined;
+                
+                log(
+                    `Step ${currentStep}: type=<strong>${step.type}</strong>, indices=[${step.indices}]` +
+                    (step.pivotIndex !== undefined ? `, <strong style="color: #FF9800;">pivotIndex=${step.pivotIndex}</strong>` : ''),
+                    isPivotStep
+                );
+
+                // バーをリセット
+                const bars = container.querySelectorAll('.bar');
+                bars.forEach(bar => {
+                    const classes = bar.className.split(' ');
+                    const hasSorted = classes.includes('sorted');
+                    bar.className = 'bar';
+                    if (hasSorted) bar.classList.add('sorted');
+                });
+
+                // ステップ適用
+                if (step.type === 'pivot') {
+                    step.indices.forEach(idx => {
+                        const bar = document.getElementById(`quick-bar-${idx}`);
+                        if (bar) {
+                            bar.classList.add('pivot');
+                            log(`  → バー ${idx} に pivot クラスを追加`, true);
+                        }
+                    });
+                } else if (step.type === 'compare') {
+                    step.indices.forEach(idx => {
+                        const bar = document.getElementById(`quick-bar-${idx}`);
+                        if (bar && !bar.classList.contains('sorted')) {
+                            bar.classList.add('comparing');
+                        }
+                    });
+                } else if (step.type === 'sorted') {
+                    step.indices.forEach(idx => {
+                        const bar = document.getElementById(`quick-bar-${idx}`);
+                        if (bar) {
+                            bar.className = 'bar sorted';
+                        }
+                    });
+                }
+
+                // ピボットを再適用
+                if (step.pivotIndex !== undefined && step.type !== 'sorted') {
+                    const pivotBar = document.getElementById(`quick-bar-${step.pivotIndex}`);
+                    if (pivotBar && !pivotBar.classList.contains('sorted')) {
+                        pivotBar.classList.remove('comparing');
+                        pivotBar.classList.add('pivot');
+                        log(`  → ピボット再適用: バー ${step.pivotIndex}`, true);
+                    }
+                }
+
+                // バーの高さ更新
+                step.array.forEach((value, index) => {
+                    const bar = document.getElementById(`quick-bar-${index}`);
+                    if (bar) {
+                        const height = (value / maxValue) * 150;
+                        bar.style.height = `${height}px`;
+                        const valueLabel = bar.querySelector('.bar-value');
+                        if (valueLabel) valueLabel.textContent = value;
+                    }
+                });
+
+                currentStep++;
+            }, 800);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>クイックソートピボットテスト</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .bar {
+            display: inline-block;
+            width: 30px;
+            margin: 2px;
+            background: #667eea;
+            text-align: center;
+            color: white;
+            border-radius: 3px 3px 0 0;
+        }
+        .bar.pivot {
+            background: linear-gradient(180deg, #FF9800 0%, #F57C00 100%);
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(255, 152, 0, 0.4);
+        }
+        .bar.comparing {
+            background: #ffc107;
+        }
+        .bar.sorted {
+            background: #4caf50;
+        }
+        .bars-display {
+            margin: 20px 0;
+            min-height: 100px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            cursor: pointer;
+        }
+        .info {
+            margin: 10px 0;
+            padding: 10px;
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 クイックソート ピボット表示テスト</h1>
+    
+    <div class="test-container">
+        <h2>テスト1: ピボットクラスの適用確認</h2>
+        <div class="bars-display" id="test1"></div>
+        <button onclick="test1()">実行</button>
+        <div class="info" id="info1"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>テスト2: アルゴリズムのステップ確認</h2>
+        <div id="test2"></div>
+        <button onclick="test2()">実行</button>
+    </div>
+
+    <script src="js/algorithms.js"></script>
+    <script>
+        function test1() {
+            const container = document.getElementById('test1');
+            const info = document.getElementById('info1');
+            
+            container.innerHTML = '';
+            
+            // テスト用の配列
+            const array = [5, 2, 8, 1, 9];
+            
+            array.forEach((val, idx) => {
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.id = `test-bar-${idx}`;
+                bar.style.height = `${val * 10}px`;
+                bar.textContent = val;
+                container.appendChild(bar);
+            });
+            
+            // ピボット（最後の要素）を設定
+            setTimeout(() => {
+                const pivotBar = document.getElementById('test-bar-4');
+                pivotBar.classList.add('pivot');
+                info.innerHTML = `<strong>✅ 成功:</strong> インデックス4（値:9）にピボットクラスが適用されました。オレンジ色で表示されているはずです。`;
+            }, 100);
+        }
+
+        function test2() {
+            const container = document.getElementById('test2');
+            container.innerHTML = '<h3>アルゴリズムステップ:</h3>';
+            
+            const algo = new SortingAlgorithms();
+            const array = [5, 2, 8, 1, 9];
+            const steps = algo.quickSort(array);
+            
+            let output = '<div style="font-family: monospace; font-size: 12px;">';
+            steps.slice(0, 10).forEach((step, idx) => {
+                output += `<div style="margin: 5px 0; padding: 5px; background: ${step.type === 'pivot' ? '#FFE0B2' : '#f5f5f5'};">`;
+                output += `<strong>Step ${idx}:</strong> type="${step.type}", indices=[${step.indices}]`;
+                if (step.pivotIndex !== undefined) {
+                    output += `, <strong style="color: #FF9800;">pivotIndex=${step.pivotIndex}</strong>`;
+                }
+                output += `<br>array=[${step.array.join(', ')}]`;
+                output += '</div>';
+            });
+            output += '</div>';
+            
+            container.innerHTML += output;
+            container.innerHTML += `<p><strong>総ステップ数:</strong> ${steps.length}</p>`;
+        }
+    </script>
+</body>
+</html>

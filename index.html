@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ソートアルゴリズム比較ツール - 高校情報Ⅰ教材</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <h1>🎓 ソートアルゴリズム比較ツール</h1>
+        <p class="subtitle">高等学校情報Ⅰ - アルゴリズムとプログラミング教材</p>
+    </header>
+
+    <main>
+        <!-- コントロールパネル -->
+        <section class="control-panel">
+            <div class="control-group">
+                <h3>📊 配列の設定</h3>
+                <div class="control-row">
+                    <label for="arraySize">配列サイズ:</label>
+                    <input type="range" id="arraySize" min="5" max="50" value="20" step="1">
+                    <span id="arraySizeValue">20</span>
+                </div>
+                <div class="control-row">
+                    <button id="randomBtn" class="btn btn-primary">🎲 ランダム生成</button>
+                    <button id="customBtn" class="btn btn-secondary">✏️ カスタム入力</button>
+                </div>
+                <div id="customInputArea" class="custom-input-area" style="display: none;">
+                    <label for="customArray">数値をカンマ区切りで入力:</label>
+                    <input type="text" id="customArray" placeholder="例: 5,3,8,1,9,2,7,4,6">
+                    <button id="applyCustomBtn" class="btn btn-small">適用</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>⚙️ 実行設定</h3>
+                <div class="control-row">
+                    <label for="speed">実行速度:</label>
+                    <input type="range" id="speed" min="1" max="10" value="5" step="1">
+                    <span id="speedValue">普通</span>
+                </div>
+                <div class="control-row">
+                    <label>
+                        <input type="checkbox" id="compareMode">
+                        比較モード（複数同時実行）
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>🎯 アルゴリズム選択</h3>
+                <div class="algorithm-select">
+                    <label><input type="checkbox" class="algo-checkbox" value="quick" checked> クイックソート</label>
+                    <label><input type="checkbox" class="algo-checkbox" value="merge" checked> マージソート</label>
+                    <label><input type="checkbox" class="algo-checkbox" value="bubble"> バブルソート</label>
+                    <label><input type="checkbox" class="algo-checkbox" value="selection"> 選択ソート</label>
+                    <label><input type="checkbox" class="algo-checkbox" value="insertion"> 挿入ソート</label>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>▶️ 実行コントロール</h3>
+                <div class="control-row">
+                    <button id="startBtn" class="btn btn-success">▶️ 開始</button>
+                    <button id="pauseBtn" class="btn btn-warning" disabled>⏸️ 一時停止</button>
+                    <button id="stepBtn" class="btn btn-info" disabled>⏭️ 1ステップ</button>
+                    <button id="resetBtn" class="btn btn-danger">🔄 リセット</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 視覚化エリア -->
+        <section class="visualization-area">
+            <div id="visualizationContainer"></div>
+        </section>
+
+        <!-- 統計情報 -->
+        <section class="stats-area">
+            <h3>📈 統計情報</h3>
+            <div id="statsContainer"></div>
+        </section>
+
+        <!-- アルゴリズム解説 -->
+        <section class="explanation-area">
+            <h2>📚 アルゴリズムの解説</h2>
+            
+            <div class="algo-card">
+                <h3>🚀 クイックソート (Quick Sort)</h3>
+                <div class="algo-details">
+                    <p><strong>概要:</strong> 分割統治法を用いたソートアルゴリズム。ピボット（基準値）を選び、それより小さい要素と大きい要素に分割を繰り返す。</p>
+                    <p><strong>時間計算量:</strong></p>
+                    <ul>
+                        <li>最良: O(n log n)</li>
+                        <li>平均: O(n log n)</li>
+                        <li>最悪: O(n²) ※ピボット選択が偏った場合</li>
+                    </ul>
+                    <p><strong>空間計算量:</strong> O(log n) (再帰のスタック)</p>
+                    <p><strong>安定性:</strong> 不安定</p>
+                    <p><strong>特徴:</strong> 平均的に非常に高速で実用的。in-placeなアルゴリズム。</p>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h3>🔀 マージソート (Merge Sort)</h3>
+                <div class="algo-details">
+                    <p><strong>概要:</strong> 配列を半分ずつ分割し、それぞれをソートした後にマージ（併合）する分割統治法。</p>
+                    <p><strong>時間計算量:</strong></p>
+                    <ul>
+                        <li>最良: O(n log n)</li>
+                        <li>平均: O(n log n)</li>
+                        <li>最悪: O(n log n) ※常に一定</li>
+                    </ul>
+                    <p><strong>空間計算量:</strong> O(n) (追加の配列が必要)</p>
+                    <p><strong>安定性:</strong> 安定</p>
+                    <p><strong>特徴:</strong> 時間計算量が常にO(n log n)で安定。外部ソートに適している。</p>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h3>🔵 バブルソート (Bubble Sort)</h3>
+                <div class="algo-details">
+                    <p><strong>概要:</strong> 隣接する要素を比較し、順序が逆なら交換を繰り返す。大きい要素が泡のように浮き上がる。</p>
+                    <p><strong>時間計算量:</strong></p>
+                    <ul>
+                        <li>最良: O(n) ※既にソート済みの場合</li>
+                        <li>平均: O(n²)</li>
+                        <li>最悪: O(n²)</li>
+                    </ul>
+                    <p><strong>空間計算量:</strong> O(1)</p>
+                    <p><strong>安定性:</strong> 安定</p>
+                    <p><strong>特徴:</strong> 最もシンプルだが効率は悪い。教育用途に適している。</p>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h3>🔍 選択ソート (Selection Sort)</h3>
+                <div class="algo-details">
+                    <p><strong>概要:</strong> 未整列部分から最小値を選択し、先頭に配置することを繰り返す。</p>
+                    <p><strong>時間計算量:</strong></p>
+                    <ul>
+                        <li>最良: O(n²)</li>
+                        <li>平均: O(n²)</li>
+                        <li>最悪: O(n²)</li>
+                    </ul>
+                    <p><strong>空間計算量:</strong> O(1)</p>
+                    <p><strong>安定性:</strong> 不安定</p>
+                    <p><strong>特徴:</strong> 交換回数が少ない。シンプルだが効率は悪い。</p>
+                </div>
+            </div>
+
+            <div class="algo-card">
+                <h3>📥 挿入ソート (Insertion Sort)</h3>
+                <div class="algo-details">
+                    <p><strong>概要:</strong> 整列済み部分に要素を適切な位置に挿入していく。トランプの手札整理に似ている。</p>
+                    <p><strong>時間計算量:</strong></p>
+                    <ul>
+                        <li>最良: O(n) ※既にソート済みの場合</li>
+                        <li>平均: O(n²)</li>
+                        <li>最悪: O(n²)</li>
+                    </ul>
+                    <p><strong>空間計算量:</strong> O(1)</p>
+                    <p><strong>安定性:</strong> 安定</p>
+                    <p><strong>特徴:</strong> 小規模データや部分的にソート済みのデータに効率的。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>高等学校情報Ⅰ教材 - アルゴリズムとプログラミング</p>
+        <p>© 2024 Educational Tool</p>
+    </footer>
+
+    <script src="js/algorithms.js"></script>
+    <script src="js/visualizer.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

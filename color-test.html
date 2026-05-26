@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>色の識別性テスト</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: #f5f5f5;
+            padding: 40px;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .test-section {
+            background: white;
+            padding: 30px;
+            margin: 20px 0;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .color-demo {
+            display: flex;
+            gap: 20px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .demo-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .demo-bar-item {
+            width: 80px;
+            height: 150px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+        .demo-label {
+            font-size: 14px;
+            text-align: center;
+            font-weight: 500;
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+        }
+        h2 {
+            color: #555;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .comparison {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .comparison h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+        .note {
+            background: #e3f2fd;
+            padding: 15px;
+            border-left: 4px solid #2196f3;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 色の識別性テスト - v2.1</h1>
+    
+    <div class="test-section">
+        <h2>改善された色の対比</h2>
+        <div class="note">
+            <strong>✅ 改善ポイント:</strong> ピボット（赤オレンジ）と比較中（明るい黄色）が明確に区別できるようになりました。
+        </div>
+        
+        <div class="color-demo">
+            <div class="demo-bar">
+                <div class="demo-bar-item" style="background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);">
+                    50
+                </div>
+                <div class="demo-label">未整列<br>（紫）</div>
+            </div>
+            
+            <div class="demo-bar">
+                <div class="demo-bar-item" style="background: linear-gradient(180deg, #FFE082 0%, #FFD54F 100%); color: #333;">
+                    50
+                </div>
+                <div class="demo-label">比較中<br>（明るい黄色）</div>
+            </div>
+            
+            <div class="demo-bar">
+                <div class="demo-bar-item" style="background: linear-gradient(180deg, #FF6B35 0%, #F44336 100%); border: 2px solid #D84315; transform: translateY(-10px);">
+                    50
+                </div>
+                <div class="demo-label">ピボット<br>（赤オレンジ）</div>
+            </div>
+            
+            <div class="demo-bar">
+                <div class="demo-bar-item" style="background: linear-gradient(180deg, #AB47BC 0%, #8E24AA 100%); border: 2px solid #6A1B9A; transform: translateY(-10px);">
+                    50
+                </div>
+                <div class="demo-label">最小値/挿入要素<br>（紫）</div>
+            </div>
+            
+            <div class="demo-bar">
+                <div class="demo-bar-item" style="background: linear-gradient(180deg, #00BCD4 0%, #0097A7 100%);">
+                    50
+                </div>
+                <div class="demo-label">マージ中<br>（シアン）</div>
+            </div>
+            
+            <div class="demo-bar">
+                <div class="demo-bar-item" style="background: linear-gradient(180deg, #4caf50 0%, #388e3c 100%);">
+                    50
+                </div>
+                <div class="demo-label">整列済み<br>（緑）</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>クイックソート専用色</h2>
+        <div class="comparison">
+            <h3>ピボットと比較中の対比</h3>
+            <div class="color-demo">
+                <div class="demo-bar">
+                    <div class="demo-bar-item" style="background: linear-gradient(180deg, #FF6B35 0%, #F44336 100%); border: 2px solid #D84315; transform: translateY(-10px); box-shadow: 0 4px 12px rgba(255, 107, 53, 0.6);">
+                        P
+                    </div>
+                    <div class="demo-label"><strong>ピボット</strong><br>赤オレンジ<br>#FF6B35</div>
+                </div>
+                
+                <div class="demo-bar">
+                    <div class="demo-bar-item" style="background: linear-gradient(180deg, #FFE082 0%, #FFD54F 100%); color: #333; transform: translateY(-5px);">
+                        C
+                    </div>
+                    <div class="demo-label"><strong>比較中</strong><br>明るい黄色<br>#FFE082</div>
+                </div>
+            </div>
+            <p><strong>✅ 結果:</strong> 赤系と黄色系で明確に区別可能</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>選択ソート・挿入ソート専用色</h2>
+        <div class="comparison">
+            <h3>紫色の特別要素</h3>
+            <div class="color-demo">
+                <div class="demo-bar">
+                    <div class="demo-bar-item" style="background: linear-gradient(180deg, #AB47BC 0%, #8E24AA 100%); border: 2px solid #6A1B9A; transform: translateY(-10px); box-shadow: 0 4px 8px rgba(171, 71, 188, 0.5);">
+                        M
+                    </div>
+                    <div class="demo-label"><strong>最小値</strong><br>紫色<br>#AB47BC</div>
+                </div>
+                
+                <div class="demo-bar">
+                    <div class="demo-bar-item" style="background: linear-gradient(180deg, #AB47BC 0%, #8E24AA 100%); border: 2px solid #6A1B9A; transform: translateY(-10px); animation: pulse 0.6s ease infinite;">
+                        I
+                    </div>
+                    <div class="demo-label"><strong>挿入要素</strong><br>紫色（パルス）<br>#AB47BC</div>
+                </div>
+            </div>
+            <p><strong>✅ 結果:</strong> クイックソートのピボットと完全に区別可能</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>全体的な色の調和</h2>
+        <div class="note">
+            <strong>色のカテゴリ分け:</strong>
+            <ul style="margin: 10px 0; padding-left: 20px;">
+                <li><strong>赤系</strong>: クイックソートのピボット（赤オレンジ）</li>
+                <li><strong>黄色系</strong>: 比較中の要素（明るい黄色）</li>
+                <li><strong>紫系</strong>: 選択ソート・挿入ソートの重要要素（紫）</li>
+                <li><strong>青系</strong>: マージソートのマージ処理（シアン）</li>
+                <li><strong>緑系</strong>: 整列済み要素（緑）</li>
+            </ul>
+        </div>
+    </div>
+
+    <style>
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</body>
+</html>
